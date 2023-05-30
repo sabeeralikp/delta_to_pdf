@@ -1,10 +1,20 @@
+/// delta_to_pdf
+/// [title] DeltaToPDF Class
+/// [Description] This is class with helper functions to convert flutter_quill delta object to pdf object
+/// [Written_by] sabeeralikp
+
 library delta_to_pdf;
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter_quill/flutter_quill.dart' as fq;
 
+/// [title] DeltaToPDF Class
+/// [Description] This is class with helper functions to convert flutter_quill delta object to pdf object
+/// [Written_by] sabeeralikp
 class DeltaToPDF {
+  /// [Description]  converts header text style
+  /// [Returns] fontWeight & fontSize
   getPDFHeaderStyle(key, value) {
     pw.FontWeight fontWeight = pw.FontWeight.normal;
     double fontSize = 14;
@@ -21,6 +31,8 @@ class DeltaToPDF {
     return [fontWeight, fontSize];
   }
 
+  /// [Description]  converts header attributed text style
+  /// [Returns] fontWeight & fontSize
   getHeaderAttributedText(
       Map<String, dynamic>? attribute, String text, bool hasAttribute) {
     pw.FontWeight fontWeight = pw.FontWeight.normal;
@@ -46,6 +58,8 @@ class DeltaToPDF {
     return [fontWeight, fontSize];
   }
 
+  /// [Description]  converts header attributed text
+  /// [Returns] all text with style
   getAttributedText(Map<String, dynamic>? attribute, String text,
       bool hasAttribute, pw.FontWeight fontWeight, double fontSize) {
     PdfColor fontColor = PdfColor.fromHex("#000");
@@ -86,6 +100,8 @@ class DeltaToPDF {
             fontFallback: [pw.Font.symbol()]));
   }
 
+  /// [Description]  main wrapper to convert delta to pdf
+  /// [Returns] pdf widget object
   deltaToPDF(List<fq.Operation> deltaList) {
     List header = [null, null];
     List texts = [];

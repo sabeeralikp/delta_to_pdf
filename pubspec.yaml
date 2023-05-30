@@ -1,6 +1,6 @@
 name: delta_to_pdf
 description: delta_to_pdf is a flutter package to convert delta to pdf object.
-version: 0.0.1
+version: 0.0.3
 homepage: https://github.com/sabeeralikp/delta_to_pdf
 
 environment:
@@ -23,10 +23,11 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # To add assets to your package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/images/convert.gif
+    - assets/images/input.jpg
+    - assets/images/output.jpg
   #   - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see

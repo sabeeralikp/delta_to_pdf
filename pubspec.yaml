@@ -1,10 +1,10 @@
 name: delta_to_pdf
 description: A new Flutter package project.
 version: 0.0.1
-homepage: lib/delta_to_pdf.dart
+homepage: https://github.com/sabeeralikp/delta_to_pdf
 
 environment:
-  sdk: ">=2.19.5 <3.0.0"
+  sdk: ">=2.19.5 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:

@@ -57,7 +57,7 @@ This package is still in beta, There is a need for many updates and bug fixes. F
 
 ## Authors
 
-<img src="https://avatars.githubusercontent.com/u/44801609?s=400&u=975a44608c86475fb3e05dc996a7b86137303587&v=4" height=80>&nbsp;&nbsp;&nbsp;<img src="https://avatars.githubusercontent.com/u/119028899?v=4" height=80><br>&nbsp;[**Sabeerali**](https://github.com/sabeeralikp) &nbsp;&nbsp;[**Swathy AS**](https://github.com/swathyas96)<br>
+<img src="https://avatars.githubusercontent.com/u/44801609?s=400&u=975a44608c86475fb3e05dc996a7b86137303587&v=4" height=80>&nbsp;&nbsp;&nbsp;<img src="https://avatars.githubusercontent.com/u/119028899?v=4" height=80><br>&nbsp;[**Sabeerali**](https://github.com/sabeeralikp) &nbsp;&nbsp;&nbsp;[**Swathy AS**](https://github.com/swathyas96)<br>
 
 ## Powered by
 

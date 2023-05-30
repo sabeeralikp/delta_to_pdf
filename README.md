@@ -18,9 +18,9 @@ delta_to_pdf is a flutter package to convert flutter quill delta object to pdf o
 
 <br>
 
-<img src="assets/images/convert.gif" height=400> &nbsp;
-<img src="assets/images/input.jpg" height=400> &nbsp;
-<img src="assets/images/output.jpg" height=400>
+<img src="https://raw.githubusercontent.com/sabeeralikp/delta_to_pdf/master/assets/images/convert.gif" height=400> &nbsp;
+<img src="https://raw.githubusercontent.com/sabeeralikp/delta_to_pdf/master/assets/images/input.jpg" height=400> &nbsp;
+<img src="https://raw.githubusercontent.com/sabeeralikp/delta_to_pdf/master/assets/images/output.jpg" height=400>
 
 ## Features
 

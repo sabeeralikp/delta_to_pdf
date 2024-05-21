@@ -39,7 +39,7 @@ class DeltaToPDF {
           }
         }
 
-        PdfColor fontColor = PdfColor.fromHex("#000");
+        PdfColor fontColor = PdfColor.fromHex("#00000000");
         FontWeight fontWeight = FontWeight.normal;
         FontStyle fontStyle = FontStyle.normal;
         TextDecoration decoration = TextDecoration.none;

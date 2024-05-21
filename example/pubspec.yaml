@@ -36,8 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   delta_to_pdf:
     path: ../
-  flutter_quill: ^7.2.1
-  pdf: ^3.10.4
+  flutter_quill: ^9.3.1
+  pdf: ^3.10.8
   path_provider: ^2.0.15
   open_app_file: ^4.0.1
 
@@ -45,12 +45,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+dependency_overrides:
+  intl: '0.18.1'
+
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

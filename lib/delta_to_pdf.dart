@@ -5,9 +5,9 @@
 
 library delta_to_pdf;
 
+import 'package:flutter_quill/quill_delta.dart' as fq;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:flutter_quill/flutter_quill.dart' as fq;
 
 /// [title] DeltaToPDF Class
 /// [Description] This is class with helper functions to convert flutter_quill delta object to pdf object

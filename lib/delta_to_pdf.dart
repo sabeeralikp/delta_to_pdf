@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter_quill/quill_delta.dart';
+import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
 class DeltaToPDF {
@@ -11,18 +14,18 @@ class DeltaToPDF {
         String textData = deltaOp.data.toString();
 
         // Check if textData is multiString
-        print('==============');
+        log('==============');
 
-        print('Data: ${deltaOp.data}');
+        log('Data: ${deltaOp.data}');
         List<String> lines = textData.split("\n");
-        print("number of lines: ${lines.length}");
+        log("number of lines: ${lines.length}");
 
         if (textData != "\n") {
           for (int idx = 0; idx < lines.length; idx++) {
             String line = lines[idx];
             textData = line;
 
-            print("Line $idx: $textData");
+            log("Line $idx: $textData");
 
             // The last line will be processed outside.
             if (idx < (lines.length - 1)) {
@@ -36,12 +39,16 @@ class DeltaToPDF {
           }
         }
 
+        PdfColor fontColor = PdfColor.fromHex("#000");
         FontWeight fontWeight = FontWeight.normal;
         FontStyle fontStyle = FontStyle.normal;
         TextDecoration decoration = TextDecoration.none;
         if (deltaOp.attributes != null) {
           for (String attribKey in deltaOp.attributes!.keys) {
             switch (attribKey) {
+              case "color":
+                fontColor = PdfColor.fromHex(deltaOp.attributes![attribKey]);
+                break;
               case 'bold':
                 fontWeight = deltaOp.attributes![attribKey]
                     ? FontWeight.bold
@@ -95,17 +102,17 @@ class DeltaToPDF {
               alignment: alignment,
               child: RichText(
                   text: TextSpan(
-                    children: inlineSpanList,
-                  ),
+                      children: inlineSpanList,
+                      style: TextStyle(color: fontColor)),
                   textAlign: textAlign)));
           // Reset the list
           inlineSpanList = [];
         }
       } else {
-        print("Unsuppored operation: ${deltaOp.key}");
+        log("Unsuppored operation: ${deltaOp.key}");
       }
     }
-    print('Column Items: ${colWidgets.length}');
+    log('Column Items: ${colWidgets.length}');
 
     return colWidgets;
   }

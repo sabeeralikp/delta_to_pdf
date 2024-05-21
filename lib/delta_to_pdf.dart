@@ -71,6 +71,7 @@ class DeltaToPDF {
         inlineSpanList.add(TextSpan(
             text: textData,
             style: TextStyle(
+                color: fontColor,
                 fontWeight: fontWeight,
                 fontStyle: fontStyle,
                 decoration: decoration)));
@@ -102,8 +103,8 @@ class DeltaToPDF {
               alignment: alignment,
               child: RichText(
                   text: TextSpan(
-                      children: inlineSpanList,
-                      style: TextStyle(color: fontColor)),
+                    children: inlineSpanList,
+                  ),
                   textAlign: textAlign)));
           // Reset the list
           inlineSpanList = [];

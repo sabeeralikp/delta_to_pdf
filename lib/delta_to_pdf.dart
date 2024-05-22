@@ -147,6 +147,6 @@ class DeltaToPDF {
 
   Widget toPDFWidget(Delta delta) {
     final List<Widget> widgets = _toPDFWidgets(delta);
-    return Column(children: widgets);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start,children: widgets);
   }
 }

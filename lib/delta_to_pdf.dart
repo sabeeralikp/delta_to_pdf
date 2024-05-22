@@ -1,11 +1,10 @@
-import 'dart:developer';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
 class DeltaToPDF {
-  List<Widget> toPDFWidgets(Delta delta) {
+  List<Widget> _toPDFWidgets(Delta delta) {
     List<Widget> colWidgets = [];
     List<InlineSpan> inlineSpanList = [];
 
@@ -14,18 +13,26 @@ class DeltaToPDF {
         String textData = deltaOp.data.toString();
 
         // Check if textData is multiString
-        log('==============');
+        if (kDebugMode) {
+          print('==============');
+        }
 
-        log('Data: ${deltaOp.data}');
+        if (kDebugMode) {
+          print('Data: ${deltaOp.data}');
+        }
         List<String> lines = textData.split("\n");
-        log("number of lines: ${lines.length}");
+        if (kDebugMode) {
+          print("number of lines: ${lines.length}");
+        }
 
         if (textData != "\n") {
           for (int idx = 0; idx < lines.length; idx++) {
             String line = lines[idx];
             textData = line;
 
-            log("Line $idx: $textData");
+            if (kDebugMode) {
+              print("Line $idx: $textData");
+            }
 
             // The last line will be processed outside.
             if (idx < (lines.length - 1)) {
@@ -39,7 +46,7 @@ class DeltaToPDF {
           }
         }
 
-        PdfColor fontColor = PdfColor.fromHex("#00000000");
+        PdfColor fontColor = _from8DigitHexColor("#FF000000");
         FontWeight fontWeight = FontWeight.normal;
         FontStyle fontStyle = FontStyle.normal;
         TextDecoration decoration = TextDecoration.none;
@@ -47,7 +54,7 @@ class DeltaToPDF {
           for (String attribKey in deltaOp.attributes!.keys) {
             switch (attribKey) {
               case "color":
-                fontColor = PdfColor.fromHex(deltaOp.attributes![attribKey]);
+                fontColor = _from8DigitHexColor(deltaOp.attributes![attribKey]);
                 break;
               case 'bold':
                 fontWeight = deltaOp.attributes![attribKey]
@@ -110,16 +117,36 @@ class DeltaToPDF {
           inlineSpanList = [];
         }
       } else {
-        log("Unsuppored operation: ${deltaOp.key}");
+        if (kDebugMode) {
+          print("Unsuppored operation: ${deltaOp.key}");
+        }
       }
     }
-    log('Column Items: ${colWidgets.length}');
+    if (kDebugMode) {
+      print('Column Items: ${colWidgets.length}');
+    }
 
     return colWidgets;
   }
 
+  PdfColor _from8DigitHexColor(String color) {
+    if (color.startsWith('#')) {
+      color = color.substring(1);
+    }
+
+    var alpha = 1.0;
+    double red;
+    double green;
+    double blue;
+    alpha = int.parse(color.substring(0, 2), radix: 16) / 255;
+    red = int.parse(color.substring(2, 4), radix: 16) / 255;
+    green = int.parse(color.substring(4, 6), radix: 16) / 255;
+    blue = int.parse(color.substring(6, 8), radix: 16) / 255;
+    return PdfColor(red, green, blue, alpha);
+  }
+
   Widget toPDFWidget(Delta delta) {
-    final List<Widget> widgets = toPDFWidgets(delta);
+    final List<Widget> widgets = _toPDFWidgets(delta);
     return Column(children: widgets);
   }
 }

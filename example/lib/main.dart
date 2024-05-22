@@ -132,9 +132,9 @@ class _MyHomePageState extends State<MyHomePage> {
               pageFormat: PdfPageFormat.a4,
               margin: pw.EdgeInsets.zero,
               build: (pw.Context context) {
-                var delta = _controller.document.toDelta().toList();
+                var delta = _controller.document.toDelta();
                 DeltaToPDF dpdf = DeltaToPDF();
-                return dpdf.deltaToPDF(delta);
+                return dpdf.toPDFWidget(delta);
               }));
           final output = await getApplicationDocumentsDirectory();
           final file = File("${output.path}/document.pdf");

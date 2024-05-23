@@ -112,11 +112,14 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            fq.QuillToolbar.basic(controller: _controller),
+            fq.QuillToolbar.simple(
+              configurations:
+                  fq.QuillSimpleToolbarConfigurations(controller: _controller),
+            ),
             Expanded(
               child: fq.QuillEditor.basic(
-                controller: _controller,
-                readOnly: false,
+                configurations: fq.QuillEditorConfigurations(
+                    controller: _controller, readOnly: false),
               ),
             )
           ],
@@ -129,9 +132,9 @@ class _MyHomePageState extends State<MyHomePage> {
               pageFormat: PdfPageFormat.a4,
               margin: pw.EdgeInsets.zero,
               build: (pw.Context context) {
-                var delta = _controller.document.toDelta().toList();
+                var delta = _controller.document.toDelta();
                 DeltaToPDF dpdf = DeltaToPDF();
-                return dpdf.deltaToPDF(delta);
+                return dpdf.toPDFWidget(delta);
               }));
           final output = await getApplicationDocumentsDirectory();
           final file = File("${output.path}/document.pdf");

@@ -1,141 +1,152 @@
-/// delta_to_pdf
-/// [title] DeltaToPDF Class
-/// [Description] This is class with helper functions to convert flutter_quill delta object to pdf object
-/// [Written_by] sabeeralikp
-
-library delta_to_pdf;
-
+import 'package:flutter/foundation.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:flutter_quill/flutter_quill.dart' as fq;
+import 'package:pdf/widgets.dart';
 
-/// [title] DeltaToPDF Class
-/// [Description] This is class with helper functions to convert flutter_quill delta object to pdf object
-/// [Written_by] sabeeralikp
 class DeltaToPDF {
-  /// [Description]  converts header text style
-  /// [Returns] fontWeight & fontSize
-  getPDFHeaderStyle(key, value) {
-    pw.FontWeight fontWeight = pw.FontWeight.normal;
-    double fontSize = 14;
-    if (value == 1) {
-      fontWeight = pw.FontWeight.bold;
-      fontSize = 24;
-    } else if (value == 2) {
-      fontWeight = pw.FontWeight.bold;
-      fontSize = 20;
-    } else {
-      fontWeight = pw.FontWeight.bold;
-      fontSize = 16;
-    }
-    return [fontWeight, fontSize];
-  }
+  List<Widget> _toPDFWidgets(Delta delta) {
+    List<Widget> colWidgets = [];
+    List<InlineSpan> inlineSpanList = [];
 
-  /// [Description]  converts header attributed text style
-  /// [Returns] fontWeight & fontSize
-  getHeaderAttributedText(
-      Map<String, dynamic>? attribute, String text, bool hasAttribute) {
-    pw.FontWeight fontWeight = pw.FontWeight.normal;
-    double fontSize = 14;
-    if (hasAttribute) {
-      attribute!.forEach((key, value) {
-        switch (key) {
-          case "header":
-            if (value == 1) {
-              fontWeight = pw.FontWeight.bold;
-              fontSize = 18;
-            } else if (value == 2) {
-              fontWeight = pw.FontWeight.bold;
-              fontSize = 16;
-            } else {
-              fontWeight = pw.FontWeight.bold;
-              fontSize = 12;
+    for (Operation deltaOp in delta.toList()) {
+      if (deltaOp.isInsert) {
+        String textData = deltaOp.data.toString();
+
+        // Check if textData is multiString
+        if (kDebugMode) {
+          print('==============');
+        }
+
+        if (kDebugMode) {
+          print('Data: ${deltaOp.data}');
+        }
+        List<String> lines = textData.split("\n");
+        if (kDebugMode) {
+          print("number of lines: ${lines.length}");
+        }
+
+        if (textData != "\n") {
+          for (int idx = 0; idx < lines.length; idx++) {
+            String line = lines[idx];
+            textData = line;
+
+            if (kDebugMode) {
+              print("Line $idx: $textData");
             }
-            break;
-        }
-      });
-    }
-    return [fontWeight, fontSize];
-  }
 
-  /// [Description]  converts header attributed text
-  /// [Returns] all text with style
-  getAttributedText(Map<String, dynamic>? attribute, String text,
-      bool hasAttribute, pw.FontWeight fontWeight, double fontSize) {
-    PdfColor fontColor = PdfColor.fromHex("#000");
-    pw.FontStyle fontStyle = pw.FontStyle.normal;
-    pw.TextDecoration decoration = pw.TextDecoration.none;
-    pw.BoxDecoration boxDecoration = const pw.BoxDecoration();
-    if (hasAttribute) {
-      attribute!.forEach((key, value) {
-        switch (key) {
-          case "color":
-            fontColor = PdfColor.fromHex(value);
-            break;
-          case "bold":
-            fontWeight = pw.FontWeight.bold;
-            break;
-          case "italic":
-            fontStyle = pw.FontStyle.italic;
-            break;
-          case "underline":
-            decoration = pw.TextDecoration.underline;
-            break;
-          case "strike":
-            decoration = pw.TextDecoration.lineThrough;
-            break;
-          case "background":
-            boxDecoration = pw.BoxDecoration(color: PdfColor.fromHex(value));
+            // The last line will be processed outside.
+            if (idx < (lines.length - 1)) {
+              // If it's empty, it's just a newline
+              if (textData.isEmpty) {
+                colWidgets.add(SizedBox(height: 12));
+              } else {
+                colWidgets.add(RichText(text: TextSpan(text: textData)));
+              }
+            }
+          }
         }
-      });
-    }
-    return pw.Text(text,
-        style: pw.TextStyle(
-            color: fontColor,
-            fontWeight: fontWeight,
-            fontStyle: fontStyle,
-            fontSize: fontSize,
-            decoration: decoration,
-            background: boxDecoration,
-            fontFallback: [pw.Font.symbol()]));
-  }
 
-  /// [Description]  main wrapper to convert delta to pdf
-  /// [Returns] pdf widget object
-  deltaToPDF(List<fq.Operation> deltaList) {
-    List header = [null, null];
-    List texts = [];
-    List pdfColumnWidget = [];
-    for (var element in deltaList.reversed) {
-      if (element.data == '\n') {
-        if (header != [] && texts != []) {
-          pdfColumnWidget = pdfColumnWidget +
-              [
-                pw.Row(
-                    children: [...texts.reversed],
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    mainAxisAlignment: pw.MainAxisAlignment.start)
-              ];
+        PdfColor fontColor = _from8DigitHexColor("#FF000000");
+        FontWeight fontWeight = FontWeight.normal;
+        FontStyle fontStyle = FontStyle.normal;
+        TextDecoration decoration = TextDecoration.none;
+        if (deltaOp.attributes != null) {
+          for (String attribKey in deltaOp.attributes!.keys) {
+            switch (attribKey) {
+              case "color":
+                fontColor = _from8DigitHexColor(deltaOp.attributes![attribKey]);
+                break;
+              case 'bold':
+                fontWeight = deltaOp.attributes![attribKey]
+                    ? FontWeight.bold
+                    : FontWeight.normal;
+                break;
+              case 'underline':
+                decoration = deltaOp.attributes![attribKey]
+                    ? TextDecoration.underline
+                    : TextDecoration.none;
+                break;
+              case 'italic':
+                fontStyle = deltaOp.attributes![attribKey]
+                    ? FontStyle.italic
+                    : FontStyle.normal;
+                break;
+            }
+          }
         }
-        texts = [];
-        header = getHeaderAttributedText(element.attributes,
-            element.data.toString(), element.attributes != null);
+
+        inlineSpanList.add(TextSpan(
+            text: textData,
+            style: TextStyle(
+                color: fontColor,
+                fontWeight: fontWeight,
+                fontStyle: fontStyle,
+                decoration: decoration)));
+
+        if (textData == "\n" || (deltaOp == delta.toList().last)) {
+          TextAlign textAlign = TextAlign.left;
+          Alignment alignment = Alignment.centerLeft;
+          if (deltaOp.hasAttribute('align')) {
+            switch (deltaOp.attributes!['align']) {
+              case 'center':
+                alignment = Alignment.center;
+                textAlign = TextAlign.center;
+                break;
+              case 'right':
+                alignment = Alignment.centerRight;
+                textAlign = TextAlign.right;
+                break;
+              case 'justify':
+                textAlign = TextAlign.justify;
+                break;
+            }
+          }
+
+          if (deltaOp.hasAttribute('list')) {
+            inlineSpanList.insert(0, const TextSpan(text: "\t\t\t\u2022 "));
+          }
+
+          colWidgets.add(Align(
+              alignment: alignment,
+              child: RichText(
+                  text: TextSpan(
+                    children: inlineSpanList,
+                  ),
+                  textAlign: textAlign)));
+          // Reset the list
+          inlineSpanList = [];
+        }
       } else {
-        texts.add(getAttributedText(
-            element.attributes,
-            element.data.toString(),
-            element.attributes != null,
-            header[0] ?? pw.FontWeight.normal,
-            header[1] ?? 14));
+        if (kDebugMode) {
+          print("Unsuppored operation: ${deltaOp.key}");
+        }
       }
     }
-    pdfColumnWidget = pdfColumnWidget +
-        [
-          pw.Row(children: [...texts.reversed])
-        ];
-    return pw.Column(
-        children: [...pdfColumnWidget.reversed],
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        mainAxisAlignment: pw.MainAxisAlignment.start);
+    if (kDebugMode) {
+      print('Column Items: ${colWidgets.length}');
+    }
+
+    return colWidgets;
+  }
+
+  PdfColor _from8DigitHexColor(String color) {
+    if (color.startsWith('#')) {
+      color = color.substring(1);
+    }
+
+    var alpha = 1.0;
+    double red;
+    double green;
+    double blue;
+    alpha = int.parse(color.substring(0, 2), radix: 16) / 255;
+    red = int.parse(color.substring(2, 4), radix: 16) / 255;
+    green = int.parse(color.substring(4, 6), radix: 16) / 255;
+    blue = int.parse(color.substring(6, 8), radix: 16) / 255;
+    return PdfColor(red, green, blue, alpha);
+  }
+
+  Widget toPDFWidget(Delta delta) {
+    final List<Widget> widgets = _toPDFWidgets(delta);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start,children: widgets);
   }
 }

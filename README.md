@@ -43,12 +43,12 @@ Use this package in your app to:
 
 ## Usage
 
-Use the functionality by creating an object and giving parameter as `List<fq.Operation> deltaList`
+Use the functionality by creating an object and giving parameter as `Delta`
 
 ```dart
-var delta = _quillController.document.toDelta().toList();
+var delta = _quillController.document.toDelta();
 DeltaToPDF dpdf = DeltaToPDF();
-return dpdf.deltaToPDF(delta);
+return dpdf.toPDFWidget(delta);
 ```
 
 ## Additional information

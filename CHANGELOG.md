@@ -14,3 +14,8 @@
 
 - Added Example
 - added comments
+
+## 0.0.7
+
+- Upgrade flutter_quill
+- change intl version

@@ -1,6 +1,6 @@
 name: delta_to_pdf
 description: delta_to_pdf is a flutter package to convert delta to pdf object.
-version: 0.0.6
+version: 0.0.7
 homepage: https://github.com/sabeeralikp/delta_to_pdf
 
 environment:
@@ -10,13 +10,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_quill: ^7.2.1
-  pdf: ^3.10.4
+  flutter_quill: ^9.3.1
+  pdf: ^3.10.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
+
+dependency_overrides:
+  intl: '0.18.1'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
